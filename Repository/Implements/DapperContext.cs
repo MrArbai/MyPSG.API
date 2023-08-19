@@ -15,20 +15,18 @@ namespace MyPSG.API.Repository.Implements
         {
             var server = "localhost";
             var port = "5432";
-            var dbName = "sgaccounting";
+            var dbName = "MyPSG";
             var appName = "SambuAF";
             var userId = "postgres";
-            var userPassword = "sambuacc@2022";
+            var userPassword = "postgres";
 
   
             _connectionString = string.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};ApplicationName={5};Timeout=600", server, port, userId, userPassword, dbName, appName);
 
-            if(_db == null){
-                _db = GetOpenConnection( _connectionString);
-            }
+            _db ??= GetOpenConnection( _connectionString);
         }
 
-        private IDbConnection GetOpenConnection(string connectionString)
+        private static IDbConnection GetOpenConnection(string connectionString)
         {
             DbConnection conn;
             try
@@ -46,24 +44,20 @@ namespace MyPSG.API.Repository.Implements
             return conn;
         }
 
-        public IDbConnection db {
-            get { return _db ?? (_db = GetOpenConnection( _connectionString)); }
+        public IDbConnection Db {
+            get { return _db ??= GetOpenConnection( _connectionString); }
         }
 
-        public IDbTransaction transaction { get; private set; }
+        public IDbTransaction Transaction { get; private set; }
 
         public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            if (transaction == null)
-                transaction = _db.BeginTransaction(isolationLevel);
+            Transaction ??= _db.BeginTransaction(isolationLevel);
         }
 
         public void Commit()
         {
-            if (transaction != null)
-            {
-                transaction.Commit();
-            }  
+            Transaction?.Commit();  
         }
 
         public void Dispose()
@@ -74,10 +68,7 @@ namespace MyPSG.API.Repository.Implements
                 {
                     if (_db.State != ConnectionState.Closed)
                     {
-                        if (transaction != null)
-                        {
-                            transaction.Rollback();
-                        }
+                        Transaction?.Rollback();
 
                         _db.Close();
                     }                        
@@ -108,10 +99,7 @@ namespace MyPSG.API.Repository.Implements
 
         public void Rollback()
         {
-            if (transaction != null)
-            {
-                transaction.Rollback();
-            }    
+            Transaction?.Rollback();    
         }
     }
 }

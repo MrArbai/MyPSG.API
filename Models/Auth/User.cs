@@ -9,29 +9,23 @@ namespace MyPSG.API.Models.Auth
         
         //internal IEnumerable<RolePrivilege> rolePrivileges;
 
-        [ExplicitKey]
-        public string User_guid { get; set; }
-        public string User_id { get; set; }
-        public string Company_id { get; set; }
-        public string Role_id { get; set; }
-        public int Employee_id { get; set; }
-        public string User_name { get; set; }
-        public string Password { get; set; }
-        public string Password_key { get; set; }
         
-        public short Status_user { get; set; }
+        
+        [ExplicitKey]
+        public string user_id { get; set; }
+        public string company_id { get; set; }
+        public string role_id { get; set; }
+        public int employee_id { get; set; }
+        public string user_name { get; set; }
+        public string password { get; set; }
+        public string user_guid { get; set; }
+        
+        public short status_user { get; set; }
         [Write(false)]
-        public string Token { get; set; }
+        public string token { get; set; }
         [Write(false)]
-        public string Sign_id { get; set; }
-        public string No_hp { get; set; }
-        public string Telegram_id { get; set; }
-        [Write(false)]
-        public Role Role { get; set; }
-        [Write(false)]
-        public List<RolePrivilege> RolePrivileges { get; set; }
-        public int Otp { get;  set; }
-        public string Bot_token { get; internal set; } = "5104251316:AAFQfc2jG0cm7zjbRLJzg0O__hQT6g1ijuo";
+        public string sign_id { get; set; }
+        public string no_hp { get; set; }
     
     }
 }

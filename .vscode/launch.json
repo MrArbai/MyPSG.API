@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "name": "C#: MyPSG.API",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}\\MyPSG.API.csproj",
+      "launchConfigurationId": "TargetFramework=;https"
+    }
+  ]
+}

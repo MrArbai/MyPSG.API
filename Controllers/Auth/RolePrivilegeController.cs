@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +10,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Opium.Api.Dtos.Utl;
-using Opium.Api.Models;
-using Opium.Api.Models.Utl;
-using Opium.Api.Repository.Implements;
-using Opium.Api.Repository.Interfaces;
+using MyPSG.API.Models;
+using MyPSG.API.Models.Auth;
+using MyPSG.API.Repository.Implements;
+using MyPSG.API.Repository.Interfaces;
 
 namespace Opium.Api.Controllers.Utl
 {
@@ -31,7 +29,7 @@ namespace Opium.Api.Controllers.Utl
         public RolePrivilegeController(IConfiguration config)
         {
             _config = config;
-            _httpContext = (IHttpContextAccessor)new HttpContextAccessor();
+            _httpContext = new HttpContextAccessor();
         }
 
         [AllowAnonymous]
@@ -49,7 +47,7 @@ namespace Opium.Api.Controllers.Utl
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -72,7 +70,7 @@ namespace Opium.Api.Controllers.Utl
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -94,7 +92,7 @@ namespace Opium.Api.Controllers.Utl
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -116,7 +114,7 @@ namespace Opium.Api.Controllers.Utl
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -129,56 +127,27 @@ namespace Opium.Api.Controllers.Utl
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             try
             {
-                //dt.CreatedDate = DateTime.Now;
                 
                  using(_context = new DapperContext()){
                     _uow = new UnitOfWork(_context);
                     await _uow.RolePrivilegeRepository.SaveRole(dt); 
                 }
                
-                log4net.LogicalThreadContext.Properties["User"] = userby;
+                LogicalThreadContext.Properties["User"] = userby;
                 _log.Info("Succes Save");
                 
                 var st = StTrans.SetSt(200, 0, "Succes");
                 return Ok(new{Status = st, Results = dt});
         
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
 
-                log4net.LogicalThreadContext.Properties["User"] = userby;
+                LogicalThreadContext.Properties["User"] = userby;
                 _log.Error("Error : ", e);
                 return Ok(new{Status = st});
             }
         }        
-
-        private string GenerateJwtToken(User user, string lastVersion)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.user_id),
-                new Claim(ClaimTypes.Role, user.role_id),
-                new Claim(ClaimTypes.Version, lastVersion)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
     }
 }

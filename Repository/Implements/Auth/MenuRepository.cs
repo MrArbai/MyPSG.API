@@ -12,8 +12,6 @@ namespace Opium.Api.Repository.Implements.Utl
     internal class MenuRepository : IMenuRepository
     {
         private IDapperContext _context;
-        private IDapperContext context;
-
 
         public MenuRepository(IDapperContext context)
         {
@@ -22,15 +20,12 @@ namespace Opium.Api.Repository.Implements.Utl
 
 
         public async Task<IEnumerable<Menu>> GetAllMenu()
-        {
-            //return await _context.db.GetAllAsync<Menu>();
-            var sql = @"SELECT * FROM tbl_utl_menu";
-            
-           return await _context.db.QueryAsync<Menu>(sql);
+        {            
+           return await Task.Run(() =>  _context.Db.GetAllAsync<Menu>());
         }
         public async Task<IEnumerable<MenuHeader>> GetAllHeader()
         {
-            return await _context.db.GetAllAsync<MenuHeader>();
+            return await _context.Db.GetAllAsync<MenuHeader>();
         }
     }
 }

@@ -3,15 +3,15 @@ using Dapper.Contrib.Extensions;
 namespace MyPSG.API.Models.Auth
 {
     [Table("tbl_utl_role_privilege")]
-    public class RolePrivilege : BaseModel
+    public class RolePrivilege
     {
         [ExplicitKey] 
-        public string Role_id { get; set; }
-        public int Menu_id { get; set; }
-        public int Grant_id { get; set; }
-        public bool Is_grant { get; set; }
-        public string Nama_menu {get; set;}
-        public string Judul_menu {get; set;}
+        public string role_id { get; set; }
+        public int menu_id { get; set; }
+        public int grant_id { get; set; }
+        public bool is_grant { get; set; }
+        public string nama_menu {get; set;}
+        public string judul_menu {get; set;}
 
     }
 }

@@ -93,8 +93,8 @@ namespace Opium.Api.Controllers.Utl
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
-                    dt.Created_by = userby;
-                    dt.Created_date = DateTime.Now;
+                    dt.created_by = userby;
+                    dt.created_date = DateTime.Now;
                     await _uow.AppVersionInfoRepository.Save(dt);
                 }
 
@@ -128,7 +128,6 @@ namespace Opium.Api.Controllers.Utl
                     _uow = new UnitOfWork(_context);
                     await _uow.AppVersionInfoRepository.Update(dt);
                 }
-
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(dt);
                 LogicalThreadContext.Properties["User"] = userby;
                 _log.Info("Succes Update");
@@ -136,7 +135,7 @@ namespace Opium.Api.Controllers.Utl
                 var st = StTrans.SetSt(200, 0, "Succes");
                 return Ok(new { Status = st, Results = dt });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(dt);
@@ -211,7 +210,7 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        private void CreateXmlFile(string dir, string fileName, AppVersionInfoXml obj)
+        private static void CreateXmlFile(string dir, string fileName, AppVersionInfoXml obj)
         {
             XmlDocument doc = new XmlDocument();
             

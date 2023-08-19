@@ -9,7 +9,8 @@ namespace MyPSG.API.Models
     public static class StTrans
     {
         public static Status SetSt(int a, int b, string c){
-            Status st = new Status {
+            Status st = new()
+            {
                 Code = a, PageCount = b, Description = c
             };
             return st;

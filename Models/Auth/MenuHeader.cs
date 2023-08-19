@@ -4,14 +4,14 @@ using Dapper.Contrib.Extensions;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_utl_header_menu")]
+    [Table("tbl_Auth_header_menu")]
     public class MenuHeader : BaseModel
     {
-        [ExplicitKey]
-        public int Header_id { get; set; }
-        public int Menu_id { get; set; }
-        public string Header_name { get; set; }
-        public int Column_no { get; set; }   
+       [ExplicitKey]
+        public int header_id { get; set; }
+        public int menu_id { get; set; }
+        public string header_name { get; set; }
+        public int column_no { get; set; }    
         
     }
 }

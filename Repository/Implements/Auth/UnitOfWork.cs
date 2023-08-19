@@ -30,19 +30,19 @@ namespace MyPSG.API.Repository.Implements
             get { return _rolePrivilegeRepository ??= new RolePrivilegeRepository(_context); }
         }
         public IRoleRepository RoleRepository {
-            get { return _roleRepository ?? (_roleRepository = new RoleRepository(_context)); }
+            get { return _roleRepository ??= new RoleRepository(_context); }
         } 
         public IMenuRepository MenuRepository {
             get { return _menuRepository ??= new MenuRepository(_context); }
         }
         public IMenuItemRepository MenuItemRepository {
-            get { return _menuItemRepository ?? (_menuItemRepository = new MenuItemRepository(_context)); }
+            get { return _menuItemRepository ??= new MenuItemRepository(_context); }
         }
         // public ICompanyProfileRepository CompanyProfileRepository {
         //     get { return _companyProfile ?? (_companyProfile = new CompanyProfileRepository(_context)); }
         // }
         public IAppVersionInfoRepository AppVersionInfoRepository {
-            get { return _appVersionInfoRepository ?? (_appVersionInfoRepository = new AppVersionInfoRepository(_context));}
+            get { return _appVersionInfoRepository ??= new AppVersionInfoRepository(_context);}
         }
         // public IFileUploadRepository FileUploadRepository {
         //     get { return _fileUploadRepository ?? (_fileUploadRepository = new FileUploadRepository(_context));}

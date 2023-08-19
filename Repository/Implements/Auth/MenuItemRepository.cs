@@ -12,8 +12,6 @@ namespace MyPSG.API.Repository.Implements.Auth
     public class MenuItemRepository : IMenuItemRepository
     {
         private IDapperContext _context;
-        private IDbTransaction _transaction;
-        // private ILog _log;
 
         public MenuItemRepository(IDapperContext context)
         {
@@ -33,7 +31,7 @@ namespace MyPSG.API.Repository.Implements.Auth
 
         public async Task<IEnumerable<MenuItem>> GetByMenuId(int id)
         {
-            return await _context.db.QueryAsync<MenuItem>("SELECT * FROM tbl_utl_item_menu WHERE menu_id = @id", new {id = id});
+            return await _context.Db.QueryAsync<MenuItem>("SELECT * FROM tbl_Auth_item_menu WHERE menu_id = @id", new {id = id});
         }
 
         public Task<MenuItem> Save(MenuItem obj)

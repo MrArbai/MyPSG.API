@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace  MyPSG.API.Models.Auth
 {
-    [Table("tbl_utl_Logs")]
+    [Table("tbl_Auth_Logs")]
     public class Log
     {
         public long LogID { get; set;}

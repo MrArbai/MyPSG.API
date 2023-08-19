@@ -26,11 +26,11 @@ namespace MyPSG.API.Controllers.Auth
         private IUnitOfWork _uow;
         private IDapperContext _context;
         private readonly IConfiguration _config;
-        private IHttpContextAccessor _httpContext;
+        private readonly IHttpContextAccessor _httpContext;
         public RoleController(IConfiguration config)
         {
             _config = config;
-            _httpContext = (IHttpContextAccessor)new HttpContextAccessor();
+            _httpContext = new HttpContextAccessor();
         }
 
         [AllowAnonymous]
@@ -40,8 +40,8 @@ namespace MyPSG.API.Controllers.Auth
             try
             {
                 IEnumerable<Role> hasil;
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     hasil = await _uow.RoleRepository.GetAll();
                 }
 
@@ -63,15 +63,15 @@ namespace MyPSG.API.Controllers.Auth
             try
             {
                 Role hasil;
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     hasil = await _uow.RoleRepository.GetRoleByMenuNameAndGrant(role_id, nama_menu, grant_id);
                 }
 
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -85,8 +85,8 @@ namespace MyPSG.API.Controllers.Auth
             try
             {
                 Role hasil;
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     hasil = await _uow.RoleRepository.GetRoleByMenuIDAndGrant(role_id, menu_id, grant_id);
                 }
 
@@ -107,15 +107,15 @@ namespace MyPSG.API.Controllers.Auth
             try
             {
                 IEnumerable<Role> hasil;
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     hasil = await _uow.RoleRepository.GetByParam(param);
                 }
 
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -127,18 +127,16 @@ namespace MyPSG.API.Controllers.Auth
         public async Task<IActionResult> Save(Role param){
             try
             {
-                using(IDapperContext _context = new DapperContext()){
-                    if(param.Role_id == null)
-                        param.Role_id = _context.GetGUID();
-
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    param.role_id ??= _context.GetGUID();
+                    _uow = new UnitOfWork(_context);
                     await _uow.RoleRepository.Save(param);
                 }
 
                 var st2 = StTrans.SetSt(200, 0, "Role has been Created !");
                 return Ok(new { Status = st2, Results = param });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -150,15 +148,15 @@ namespace MyPSG.API.Controllers.Auth
         public async Task<IActionResult> Update(Role param){
             try
             {
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     await _uow.RoleRepository.Update(param);
                 }
 
-                var st2 = StTrans.SetSt(200, 0, "Role has been Created !");
+                var st2 = StTrans.SetSt(200, 0, "Role has been Updated !");
                 return Ok(new { Status = st2, Results = param });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -170,15 +168,15 @@ namespace MyPSG.API.Controllers.Auth
         public async Task<IActionResult> Delete(Role param){
             try
             {
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWork(_context);
+                using(_context = new DapperContext()){
+                    _uow = new UnitOfWork(_context);
                     await _uow.RoleRepository.Delete(param);
                 }
 
-                var st2 = StTrans.SetSt(200, 0, "Role has been Created !");
+                var st2 = StTrans.SetSt(200, 0, "Role has been Deleted !");
                 return Ok(new { Status = st2, Results = param });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });

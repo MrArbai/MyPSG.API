@@ -11,7 +11,7 @@ namespace MyPSG.API
     {
         public static void Main(string[] args)
         {
-            XmlDocument log4netConfig = new XmlDocument();
+            XmlDocument log4netConfig = new();
             log4netConfig.Load(File.OpenRead("log4net.config"));
             log4net.Config.XmlConfigurator.Configure(log4net.LogManager.GetRepository(Assembly.GetEntryAssembly()), log4netConfig["log4net"]);
             CreateHostBuilder(args).Build().Run();

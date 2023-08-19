@@ -23,14 +23,10 @@ namespace MyPSG.API.Controllers.Auth
     public class MenuController : ControllerBase
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(MenuController));
-        private IUnitOfWork _uow;
-        private IDapperContext _context;
         private readonly IConfiguration _config;
-        private IHttpContextAccessor _httpContext;
         public MenuController(IConfiguration config)
         {
             _config = config;
-            _httpContext = new HttpContextAccessor();
         }
 
         [AllowAnonymous]
@@ -47,7 +43,7 @@ namespace MyPSG.API.Controllers.Auth
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -68,7 +64,7 @@ namespace MyPSG.API.Controllers.Auth
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = hasil });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -90,7 +86,7 @@ namespace MyPSG.API.Controllers.Auth
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
                 return Ok(new { Status = st2, Results = dt });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });

@@ -22,37 +22,37 @@ namespace MyPSG.API.Repository.Implements.Auth
 
         public async Task<IEnumerable<Role>> GetAll()
         {
-            return await _context.db.QueryAsync<Role>("SELECT * FROM tbl_utl_role order by role_name");
+            return await _context.Db.QueryAsync<Role>("SELECT * FROM tbl_Auth_role order by role_name");
 
         }
 
         public async Task<Role> Save(Role obj)
         {
-            await _context.db.InsertAsync(obj);
+            await _context.Db.InsertAsync(obj);
             return null;
         }
 
         public async Task<Role> Update(Role obj)
         {
-            await _context.db.UpdateAsync(obj);
+            await _context.Db.UpdateAsync(obj);
             return null;
         }
         
         public async Task<Role> Delete(Role obj)
         {
-            await _context.db.DeleteAsync(obj);
+            await _context.Db.DeleteAsync(obj);
             return null;
         }
 
         public async Task<Role> GetRoleByMenuNameAndGrant(string role_id, string nama_menu, int grant_id)
         {
-            return await _context.db.QueryFirstOrDefaultAsync<Role>("SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_utl_role_privilege as a INNER JOIN tbl_utl_menu as b ON a.menu_id = b.menu_id where a.role_id = @l1 and b.nama_menu=@l2 and a.grant_id=@l3", 
+            return await _context.Db.QueryFirstOrDefaultAsync<Role>("SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_Auth_role_privilege as a INNER JOIN tbl_Auth_menu as b ON a.menu_id = b.menu_id where a.role_id = @l1 and b.nama_menu=@l2 and a.grant_id=@l3", 
             new { l1 = role_id, l2 = nama_menu, l3 = grant_id });
         }
 
         public async Task<Role> GetRoleByMenuIDAndGrant(string role_id, string menu_id, int grant_id)
         {
-            return await _context.db.QueryFirstOrDefaultAsync<Role>("SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_utl_role_privilege as a INNER JOIN tbl_utl_menu as b ON a.menu_id = b.menu_id where a.role_id = @l1 and b.menu_id=@l2 and a.grant_id=@l3", 
+            return await _context.Db.QueryFirstOrDefaultAsync<Role>("SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_Auth_role_privilege as a INNER JOIN tbl_Auth_menu as b ON a.menu_id = b.menu_id where a.role_id = @l1 and b.menu_id=@l2 and a.grant_id=@l3", 
             new { l1 = role_id, l2 = menu_id, l3 = grant_id });
         }
 
@@ -60,18 +60,18 @@ namespace MyPSG.API.Repository.Implements.Auth
         {
             string sql;
 
-            sql = string.Format(@"SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_utl_role_privilege as a INNER JOIN tbl_utl_menu as b ON a.menu_id = b.menu_id WHERE a.role_id='{0}'", role_id);
+            sql = string.Format(@"SELECT a.role_id, a.grant_id, a.is_grant, b.menu_id, b.nama_menu, b.is_active FROM tbl_Auth_role_privilege as a INNER JOIN tbl_Auth_menu as b ON a.menu_id = b.menu_id WHERE a.role_id='{0}'", role_id);
 
-            return await _context.db.QueryAsync<Role>(sql);
+            return await _context.Db.QueryAsync<Role>(sql);
 
         }
         public async Task<IEnumerable<Role>> GetByParam(RoleDto param)
         {
             string sql;
 
-            sql = string.Format(@"SELECT * FROM tbl_utl_role  order by role_name");
+            sql = string.Format(@"SELECT * FROM tbl_Auth_role  order by role_name");
 
-            return await _context.db.QueryAsync<Role>(sql);
+            return await _context.Db.QueryAsync<Role>(sql);
 
         }
 

@@ -1,4 +1,5 @@
 using System.Text;
+using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using MyPSG.API.Repository.Interfaces;
+using MyPSG.API.Repository.Implements;
 
 namespace MyPSG.API
 {
@@ -34,8 +37,16 @@ namespace MyPSG.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BotTelegram", Version = "v1" });
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
             });
-            // services.AddSingleton<IDapperContext, DapperContext>();
+            services.AddSingleton<IDapperContext, DapperContext>();
 
             services.Configure<FormOptions>(options =>
             {
@@ -84,7 +95,6 @@ namespace MyPSG.API
                 options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()
             );
 
-            //  Fluent Validation
             services.AddControllers()
                 .AddFluentValidation(s =>
                 {

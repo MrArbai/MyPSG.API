@@ -4,7 +4,7 @@ using Dapper.Contrib.Extensions;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_utl_menu")]
+    [Table("tbl_Auth_menu")]
     public class Menu : BaseModel
     {
         [ExplicitKey]

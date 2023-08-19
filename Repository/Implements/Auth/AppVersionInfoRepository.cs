@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
@@ -11,8 +10,7 @@ namespace MyPSG.API.Repository.Implements.Auth
 {
     public class AppVersionInfoRepository : IAppVersionInfoRepository
     {
-        private IDapperContext _context;
-        private IDbTransaction _transaction;
+        private readonly IDapperContext _context;
 
         public AppVersionInfoRepository(IDapperContext context)
         {
@@ -21,24 +19,24 @@ namespace MyPSG.API.Repository.Implements.Auth
 
         public async Task<IEnumerable<AppVersionInfo>> GetAll()
         {
-            return await _context.db.GetAllAsync<AppVersionInfo>();
+            return await _context.Db.GetAllAsync<AppVersionInfo>();
         }
 
         public async Task<AppVersionInfo> GetLastAppVersion()
         {
-            return await _context.db.QueryFirstOrDefaultAsync<AppVersionInfo>("SELECT TOP 1 * FROM tbl_utl_app_version_info ORDER BY id DESC ");
+            return await _context.Db.QueryFirstOrDefaultAsync<AppVersionInfo>("SELECT TOP 1 * FROM tbl_Auth_app_version_info ORDER BY id DESC ");
         }
 
         public async Task<AppVersionInfo> Save(AppVersionInfo obj)
         {
-            AppVersionInfo dt = new AppVersionInfo();
-            await _context.db.InsertAsync(obj);
+            AppVersionInfo dt = new();
+            await _context.Db.InsertAsync(obj);
             return dt;
         }
 
         public async Task<AppVersionInfo> Update(AppVersionInfo obj)
         {
-             await _context.db.QueryAsync("UPDATE tbl_utl_app_version_info SET bug_fixed = @BugFixed WHERE id = @ID",
+             await _context.Db.QueryAsync("UPDATE tbl_Auth_app_version_info SET bug_fixed = @BugFixed WHERE id = @ID",
                 new {BugFixed = obj.bug_fixed, ID = obj.id }
             );
 
@@ -47,7 +45,7 @@ namespace MyPSG.API.Repository.Implements.Auth
 
         public async Task UpdateVersion(long id, string AppVersion)
         {
-            await _context.db.QueryAsync("UPDATE tbl_utl_app_version_info SET last_version = @AppVersion WHERE id = @id", new {AppVersion = AppVersion, id = id});
+            await _context.Db.QueryAsync("UPDATE tbl_Auth_app_version_info SET last_version = @AppVersion WHERE id = @id", new { AppVersion, id });
         }
     }
 }

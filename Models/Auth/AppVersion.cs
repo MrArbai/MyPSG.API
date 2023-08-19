@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_utl_app_version_info")]
+    [Table("tbl_Auth_app_version_info")]
     public class AppVersionInfo : BaseModel
     {
-        //[ExplicitKey]
+        //ExplicitKey]
         public long id { get; set; }
         public string app_id { get; set; }
         public string last_version { get; set; }
@@ -26,3 +26,4 @@ namespace MyPSG.API.Models.Auth
         public string LaunchArgs { get; set; }
     }
 }
+

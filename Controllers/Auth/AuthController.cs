@@ -16,7 +16,6 @@ using MyPSG.API.Models;
 using MyPSG.API.Models.Auth;
 using MyPSG.API.Repository.Implements;
 using MyPSG.API.Repository.Interfaces;
-using Telegram.Bot;
 
 namespace MyPSG.API.Controllers.Utl
 {
@@ -29,7 +28,6 @@ namespace MyPSG.API.Controllers.Utl
         private IDapperContext _context;
         private readonly IConfiguration _config;
         private IHttpContextAccessor _httpContext;
-        private TelegramBotClient Bot;
 
         public AuthController(IConfiguration config)
         {
@@ -67,19 +65,19 @@ namespace MyPSG.API.Controllers.Utl
                     _uow = new UnitOfWork(_context);
                     User user = new()
                     {
-                        User_id = userDto.User_id,
-                        Role_id = userDto.Role_id,
-                        Employee_id = userDto.Employee_id,
-                        User_name = userDto.User_name,
-                        Password = userDto.Password,
-                        Password_key = _context.GetGUID(),
-                        Is_active = true,
-                        Company_id = company_id,
-                        Status_user = userDto.Status_user,
-                        Created_by = userby,
-                        Created_date = DateTime.Now,
-                        Computer_name = userDto.Computer,
-                        Computer_date = DateTime.Now
+                        user_id = userDto.User_id,
+                        role_id = userDto.Role_id,
+                        employee_id = userDto.Employee_id,
+                        user_name = userDto.User_name,
+                        password = userDto.Password,
+                        user_guid = _context.GetGUID(),
+                        is_active = true,
+                        company_id = company_id,
+                        status_user = userDto.Status_user,
+                        created_by = userby,
+                        created_date = DateTime.Now,
+                        computer_name = userDto.Computer,
+                        computer_date = DateTime.Now
                     };
                     usercreate = await _uow.AuthRepository.Register(user);
                 }
@@ -87,7 +85,7 @@ namespace MyPSG.API.Controllers.Utl
                 return Ok(new { Status = st2, Results = usercreate });
 
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 return Ok(new { Status = st });
@@ -147,51 +145,57 @@ namespace MyPSG.API.Controllers.Utl
             try
             {
                 var dt = new User();
+                
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
                     dt = await _uow.AuthRepository.Login(userDto.User_id.ToLower(), userDto.Password);
                     var ds = await _uow.AuthRepository.GetAppVersions();
-
+                    var dtl = new UserDto()
+                    {
+                        user_id = dt.user_id,
+                        user_guid = dt.user_guid,
+                        user_name = dt.user_name,
+                        status_user = dt.status_user,
+                        company_id = dt.company_id,
+                        role_id = dt.role_id,
+                        employee_id = dt.employee_id,
+                        password = dt.password,
+                        sign_id = dt.sign_id,
+                        no_hp = dt.no_hp,
+                        token = dt.token,
+                        
+                    };
                     UserLoginInfo users = new()
                     {
-                        Login_guid = _context.GetGUID(),
-                        Login_date = DateTime.Now,
-                        Login_id = userDto.User_id.ToLower(),
-                        Computer_name = userDto.Computer,
-                        Login_type = "O",
-                        App_version = ds.last_version,
-                        Ip_address = Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                        login_guid = _context.GetGUID(),
+                        login_date = DateTime.Now,
+                        login_id = userDto.User_id.ToLower(),
+                        computer_name = userDto.Computer,
+                        login_type = "O",
+                        app_version = ds.last_version,
+                        ip_address = Request.HttpContext.Connection.RemoteIpAddress.ToString()
                     };
 
                     await _uow.AuthRepository.Login(users);
-                    dt.Sign_id = users.Login_guid;
+                    dt.sign_id = users.login_guid;
 
                     if (dt == null)
                         return Unauthorized();
 
-                    dt.Role = await _uow.AuthRepository.GetRoleByID(dt.Role_id);
-                    dt.Token = GenerateJwtToken(dt, ds.last_version);
+                    dtl.Role = await _uow.AuthRepository.GetRoleByID(dt.role_id);
+                    dt.token = GenerateJwtToken(dt, ds.last_version);
 
                     IEnumerable<RolePrivilege> hasil;
                     hasil = await _uow.RolePrivilegeRepository.GetAll();
 
-                    dt.RolePrivileges = hasil.ToList();
+                    dtl.RolePrivileges = hasil.ToList();
                 }
 
-                var st = StTrans.SetSt(200, 0, "User Berhasil Login");
-                Random rnd = new Random();
-                dt.Otp = rnd.Next(100000, 999999);
-
-                Console.Write(dt.Telegram_id);
-                if(dt.Telegram_id != null){
-                    Bot = new TelegramBotClient(dt.Bot_token);
-                    await Bot.SendTextMessageAsync(dt.Telegram_id, "Your OTP IS : " + dt.Otp);
-                }
-                
+                var st = StTrans.SetSt(200, 0, "User Berhasil Login");               
                 return Ok(new { Status = st, Results = dt });
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 var st = StTrans.SetSt(400, 0, e.Message);
                 _log.Error(e.Message);
@@ -210,7 +214,7 @@ namespace MyPSG.API.Controllers.Utl
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
-                    await _uow.AuthRepository.ChangePassword(cur.User_id, cur.PasswordOld, cur.PasswordNew);
+                    await _uow.AuthRepository.Changepassword(cur.User_id, cur.PasswordOld, cur.PasswordNew);
                 }
 
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(cur);
@@ -243,7 +247,7 @@ namespace MyPSG.API.Controllers.Utl
                 {
                     string pass = "123";
                     _uow = new UnitOfWork(_context);
-                    await _uow.AuthRepository.ChangePassword(cur.User_id, pass);
+                    await _uow.AuthRepository.Changepassword(cur.User_id, pass);
                 }
 
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(cur);
@@ -302,11 +306,11 @@ namespace MyPSG.API.Controllers.Utl
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
-                    var flag = await _uow.AuthRepository.UserExists(user.User_id);
+                    var flag = await _uow.AuthRepository.UserExists(user.user_id);
                 }
 
                 var dt = GenerateJwtToken(user, version);
-                user.Token = dt;
+                user.token = dt;
 
                 var st = StTrans.SetSt(200, 0, "User Berhasil Login");
                 return Ok(new { Status = st, Results = user });
@@ -323,11 +327,11 @@ namespace MyPSG.API.Controllers.Utl
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.PrimarySid, user.Sign_id),
-                new Claim(ClaimTypes.Name, user.User_id),
-                new Claim(ClaimTypes.Role, user.Role_id),
+                new Claim(ClaimTypes.PrimarySid, user.sign_id),
+                new Claim(ClaimTypes.Name, user.user_id),
+                new Claim(ClaimTypes.Role, user.role_id),
                 new Claim(ClaimTypes.Version, lastVersion),
-                new Claim(ClaimTypes.GroupSid, user.Company_id)
+                new Claim(ClaimTypes.GroupSid, user.company_id)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8
