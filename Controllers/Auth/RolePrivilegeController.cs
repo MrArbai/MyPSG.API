@@ -55,8 +55,8 @@ namespace Opium.Api.Controllers.Utl
         }
 
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpGet("GetRoleMenuByName")]
+        
+        [HttpGet("GetRoleMenuByName"),Authorize]
         public async Task<IActionResult> GetRoleMenuByName(string role_id, string nama_menu, int grant_id)
         {
             try
@@ -77,8 +77,8 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpGet("GetRoleMenuByID")]
+        
+        [HttpGet("GetRoleMenuByID"),Authorize]
         public async Task<IActionResult> GetRoleMenuByID(string role_id, string menu_id, int grant_id)
         {
             try
@@ -99,8 +99,8 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpGet("GetRoleByID")]
+        
+        [HttpGet("GetRoleByID"),Authorize]
         public async Task<IActionResult> GetRoleByID(string role_id)
         {
             try
@@ -120,9 +120,8 @@ namespace Opium.Api.Controllers.Utl
                 return Ok(new { Status = st });
             }
         }
-
-        [Authorize(Policy="RequireAdmin")]        
-        [HttpPost("Save")]
+       
+        [HttpPost("Save"),Authorize]
         public async Task<IActionResult> Save(RolePrivilege dt){
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             try

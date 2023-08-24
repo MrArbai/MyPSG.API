@@ -83,8 +83,7 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Save")]
+        [HttpPost("Save"),Authorize]
         public async Task<IActionResult> Save(AppVersionInfo dt)
         {
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
@@ -116,8 +115,7 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Update")]
+        [HttpPost("Update"),Authorize]
         public async Task<IActionResult> Update(AppVersionInfo dt)
         {
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
@@ -145,8 +143,7 @@ namespace Opium.Api.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Upload")]
+        [HttpPost("Upload"),Authorize]
         [RequestFormLimits(MultipartBodyLengthLimit = 409715200)]
         [RequestSizeLimit(409715200)]
         public async Task<IActionResult> Upload([FromForm] AppVersionInfoXml obj)

@@ -35,8 +35,7 @@ namespace MyPSG.API.Controllers.Utl
             _httpContext = new HttpContextAccessor();
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Save")]
+        [HttpPost("Save"),Authorize]
         public async Task<IActionResult> Register(UserRegisterDto userDto)
         {
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
@@ -91,8 +90,8 @@ namespace MyPSG.API.Controllers.Utl
                 return Ok(new { Status = st });
             }
         }
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Update")]
+
+        [HttpPost("Update"),Authorize]
         public async Task<IActionResult> Update(User user)
         {
             try
@@ -145,7 +144,7 @@ namespace MyPSG.API.Controllers.Utl
             try
             {
                 var dt = new User();
-                
+
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
@@ -164,7 +163,7 @@ namespace MyPSG.API.Controllers.Utl
                         sign_id = dt.sign_id,
                         no_hp = dt.no_hp,
                         token = dt.token,
-                        
+
                     };
                     UserLoginInfo users = new()
                     {
@@ -192,7 +191,7 @@ namespace MyPSG.API.Controllers.Utl
                     dtl.RolePrivileges = hasil.ToList();
                 }
 
-                var st = StTrans.SetSt(200, 0, "User Berhasil Login");               
+                var st = StTrans.SetSt(200, 0, "User Berhasil Login");
                 return Ok(new { Status = st, Results = dt });
             }
             catch (Exception e)
@@ -203,8 +202,7 @@ namespace MyPSG.API.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("ChangePassword")]
+        [HttpPost("ChangePassword"),Authorize]
         public async Task<IActionResult> ChangePassword(UserChangePasswordDto cur)
         {
             string userby = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
@@ -234,7 +232,7 @@ namespace MyPSG.API.Controllers.Utl
                 return Ok(new { Status = st });
             }
         }
-        
+
         [AllowAnonymous]
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(UserChangePasswordDto cur)
@@ -295,13 +293,12 @@ namespace MyPSG.API.Controllers.Utl
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("ChangeToken")]
+        [HttpPost("ChangeToken"),Authorize]
         public async Task<IActionResult> ChangeToken(User user)
         {
             try
             {
-                string version =  _httpContext.HttpContext.User.FindFirst(ClaimTypes.Version).Value;
+                string version = _httpContext.HttpContext.User.FindFirst(ClaimTypes.Version).Value;
 
                 using (_context = new DapperContext())
                 {
@@ -317,7 +314,7 @@ namespace MyPSG.API.Controllers.Utl
             }
             catch (Exception ex)
             {
-                 var st = StTrans.SetSt(400, 0, ex.Message);
+                var st = StTrans.SetSt(400, 0, ex.Message);
                 _log.Error(ex.Message);
                 return Ok(new { Status = st });
             }
@@ -325,7 +322,7 @@ namespace MyPSG.API.Controllers.Utl
         }
         private string GenerateJwtToken(User user, string lastVersion)
         {
-            var claims = new List<Claim>
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.PrimarySid, user.sign_id),
                 new Claim(ClaimTypes.Name, user.user_id),
@@ -334,23 +331,20 @@ namespace MyPSG.API.Controllers.Utl
                 new Claim(ClaimTypes.GroupSid, user.company_id)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _config.GetSection("AppSettings:Token").Value!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
+            var token = new JwtSecurityToken(
+                    claims: claims,
+                    expires: DateTime.Now.AddYears(2),
+                    signingCredentials: creds
+                );
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+            return jwt;
         }
-    }
+}
 }

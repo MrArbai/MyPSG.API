@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MyPSG.API.Models;
 using MyPSG.API.Models.Auth;
 using MyPSG.API.Repository.Implements;
@@ -29,8 +24,7 @@ namespace MyPSG.API.Controllers.Auth
             _config = config;
         }
 
-        [AllowAnonymous]
-        [HttpGet("GetAllMenu")]   
+        [HttpGet("GetAllMenu"),Authorize]   
         public async Task<IActionResult> GetAllMenu(){
             try
             {

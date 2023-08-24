@@ -55,9 +55,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpGet("GetRoleMenuByName")]
+        [HttpGet("GetRoleMenuByName"),Authorize]
         public async Task<IActionResult> GetRoleMenuByName(string role_id, string nama_menu, int grant_id)
         {
             try
@@ -78,8 +76,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpGet("GetRoleMenuByID")]
+        [HttpGet("GetRoleMenuByID"),Authorize]
         public async Task<IActionResult> GetRoleMenuByID(string role_id, string menu_id, int grant_id)
         {
             try
@@ -100,8 +97,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("GetByParam")]
+        [HttpPost("GetByParam"),Authorize]
         public async Task<IActionResult> GetByParam(RoleDto param)
         {
             try
@@ -122,8 +118,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Save")]   
+        [HttpPost("Save"),Authorize]   
         public async Task<IActionResult> Save(Role param){
             try
             {
@@ -143,8 +138,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Update")]   
+        [HttpPost("Update"),Authorize]   
         public async Task<IActionResult> Update(Role param){
             try
             {
@@ -163,8 +157,7 @@ namespace MyPSG.API.Controllers.Auth
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
-        [HttpPost("Delete")]   
+        [HttpPost("Delete"),Authorize]   
         public async Task<IActionResult> Delete(Role param){
             try
             {
