@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_login_info")]
+    [Table("tbl_auth_login_info")]
     public class UserLoginInfo
     {
         [Dapper.Contrib.Extensions.ExplicitKey]

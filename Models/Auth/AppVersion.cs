@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_app_version_info")]
+    [Table("tbl_auth_app_version_info")]
     public class AppVersionInfo : BaseModel
     {
         //ExplicitKey]

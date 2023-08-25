@@ -92,8 +92,8 @@ namespace Opium.Api.Controllers.Utl
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
-                    dt.created_by = userby;
-                    dt.created_date = DateTime.Now;
+                    dt.Created_by = userby;
+                    dt.Created_date = DateTime.Now;
                     await _uow.AppVersionInfoRepository.Save(dt);
                 }
 

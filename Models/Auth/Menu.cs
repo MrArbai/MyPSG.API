@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_menu")]
+    [Table("tbl_auth_menu")]
     public class Menu : BaseModel
     {
         [Dapper.Contrib.Extensions.ExplicitKey]

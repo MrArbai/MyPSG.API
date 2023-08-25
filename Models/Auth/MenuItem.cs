@@ -2,7 +2,7 @@ using Dapper.Contrib.Extensions;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_menu_item")]
+    [Table("tbl_auth_menu_item")]
     public class MenuItem : BaseModel
     {
         public string item_menu_id { get; set; }

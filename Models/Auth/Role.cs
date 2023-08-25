@@ -2,7 +2,7 @@ using Dapper.Contrib.Extensions;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_role")]
+    [Table("tbl_auth_role")]
     public class Role : BaseModel
     {
         [ExplicitKey]

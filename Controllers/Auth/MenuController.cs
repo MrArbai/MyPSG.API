@@ -24,7 +24,7 @@ namespace MyPSG.API.Controllers.Auth
             _config = config;
         }
 
-        [HttpGet("GetAllMenu"),Authorize]   
+        [HttpGet("GetAllMenu")]   
         public async Task<IActionResult> GetAllMenu(){
             try
             {

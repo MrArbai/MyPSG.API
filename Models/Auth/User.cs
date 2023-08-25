@@ -1,31 +1,37 @@
 using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyPSG.API.Models.Auth
 {
-    [Table("tbl_Auth_user")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("tbl_auth_user")]
     public class User : BaseModel
     {
-        
-        //internal IEnumerable<RolePrivilege> rolePrivileges;
-
-        
-        
         [ExplicitKey]
-        public string user_id { get; set; }
-        public string company_id { get; set; }
-        public string role_id { get; set; }
-        public int employee_id { get; set; }
-        public string user_name { get; set; }
-        public string password { get; set; }
-        public string user_guid { get; set; }
-        
-        public short status_user { get; set; }
+        [Column("user_id")]
+        public string User_id { get; set; }
+        [Column("company_id")]
+        public string Company_id { get; set; }
+        [Column("role_id")]
+        public string Role_id { get; set; }
+        [Column("employee_id")]
+        public int Employee_id { get; set; }
+        [Column("user_name")]
+        public string User_name { get; set; }
+        [Column("password")]
+        public string Password { get; set; }
+        [Column("user_guid")]
+        public string User_guid { get; set; }
+        [Column("status_user")]        
+        public short Status_user { get; set; }
         [Write(false)]
-        public string token { get; set; }
+        [Column("token")]
+        public string Token { get; set; }
         [Write(false)]
-        public string sign_id { get; set; }
-        public string no_hp { get; set; }
+        [Column("sign_id")]
+        public string Sign_id { get; set; }
+        [Column("no_hp")]
+        public string No_hp { get; set; }
     
     }
 }

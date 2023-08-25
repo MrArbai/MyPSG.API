@@ -1,22 +1,31 @@
 using Dapper.Contrib.Extensions;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace MyPSG.API.Models.Master
 {
-    [Table("tbl_Mst_Item")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("tbl_mst_Item")]
     public class Item : BaseModel
     {
         [ExplicitKey]
-        public string itemID { get; set; }
-        public int revisionNo { get; set; }
-        public string itemName { get; set; }
-        public string itemDesc { get; set; }
-        public int purchaseUOMID { get; set; }
-        public decimal conversionUOM { get; set; }  
-        public int uomid { get; set; }     
-        public int subCategoryID { get; set; }    
-        public string imagepath { get; set; }      
+        [Column("item_id")]
+        public string ItemID { get; set; }
+        [Column("revision_no")]
+        public int RevisionNo { get; set; }
+        [Column("item_name")]
+        public string ItemName { get; set; }
+        [Column("itemDesc")]
+        public string ItemDesc { get; set; }
+        [Column("purchase_uom_id")]
+        public int PurchaseUOMID { get; set; }
+        [Column("conversion_uom")]
+        public decimal ConversionUOM { get; set; } 
+        [Column("uom_id")] 
+        public int Uomid { get; set; }  
+        [Column("subcategory_id")]   
+        public int SubCategoryID { get; set; }  
+        [Column("image_path")]  
+        public string Imagepath { get; set; }      
         
     }
 }
