@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -21,12 +22,12 @@ namespace MyPSG.API.Models.Master
         [Column("conversion_uom")]
         public decimal ConversionUOM { get; set; } 
         [Column("uom_id")] 
-        public int Uomid { get; set; }  
+        public int UomID { get; set; }  
         [Column("subcategory_id")]   
         public int SubCategoryID { get; set; }  
         [Column("image_path")]  
-        public string Imagepath { get; set; }      
-        
+        public string Imagepath { get; set; }
+
     }
 }
 

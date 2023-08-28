@@ -212,7 +212,7 @@ namespace MyPSG.API.Controllers.Utl
                 using (_context = new DapperContext())
                 {
                     _uow = new UnitOfWork(_context);
-                    await _uow.AuthRepository.Changepassword(cur.User_id, cur.PasswordOld, cur.PasswordNew);
+                    await _uow.AuthRepository.ChangePassword(cur.User_id, cur.PasswordOld, cur.PasswordNew);
                 }
 
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(cur);
@@ -245,7 +245,7 @@ namespace MyPSG.API.Controllers.Utl
                 {
                     string pass = "123";
                     _uow = new UnitOfWork(_context);
-                    await _uow.AuthRepository.Changepassword(cur.User_id, pass);
+                    await _uow.AuthRepository.ChangePassword(cur.User_id, pass);
                 }
 
                 LogicalThreadContext.Properties["NewValue"] = Logs.ToJson(cur);
@@ -338,7 +338,7 @@ namespace MyPSG.API.Controllers.Utl
 
             var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: DateTime.Now.AddYears(2),
+                    expires: DateTime.Now.AddDays(1),
                     signingCredentials: creds
                 );
 

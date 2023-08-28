@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
@@ -13,7 +11,7 @@ namespace MyPSG.API.Repository.Implements.Auth
 {
     internal class AuthRepository : IAuthRepository
     {
-        private IDapperContext _context;
+        private readonly IDapperContext _context;
         // private ILog _log;
 
         public AuthRepository(IDapperContext context)
@@ -25,26 +23,26 @@ namespace MyPSG.API.Repository.Implements.Auth
         {
             return await _context.Db.GetAllAsync<User>();
         }
-        public async Task<bool> Changepassword(string username, string passwordold, string passwordnew)
+        public async Task<bool> ChangePassword(string username, string Passwordold, string Passwordnew)
         {
             var user = await Task.Run(() => _context.Db.Get<User>(username));
-            var psold = BCrypt.Net.BCrypt.HashPassword(passwordold);
-            if (user == null || user.password != psold)
+            var psold = BCrypt.Net.BCrypt.HashPassword(Passwordold);
+            if (user == null || user.Password != psold)
                 return false;
 
-            var psnew = BCrypt.Net.BCrypt.HashPassword(passwordnew);
-            user.password = psnew;
+            var psnew = BCrypt.Net.BCrypt.HashPassword(Passwordnew);
+            user.Password = psnew;
             await _context.Db.UpdateAsync(user);
 
             return true;
         }
 
-        public async Task<bool> Changepassword(string username, string passwordnew)
+        public async Task<bool> ChangePassword(string username, string Passwordnew)
         {
             var user = await Task.Run(() => _context.Db.Get<User>(username));
             
-            var psnew = BCrypt.Net.BCrypt.HashPassword(passwordnew);
-            user.password = psnew;
+            var psnew = BCrypt.Net.BCrypt.HashPassword(Passwordnew);
+            user.Password = psnew;
             await _context.Db.UpdateAsync(user);
 
             return true;
@@ -54,13 +52,13 @@ namespace MyPSG.API.Repository.Implements.Auth
             await _context.Db.InsertAsync(userLoginDto);
         }
 
-        public async Task<User> Login(string userID, string password)
+        public async Task<User> Login(string userID, string Password)
         {
             try
             {
                 var user = await Task.Run(() => _context.Db.Get<User>(userID)) ?? throw new Exception("User Tidak terdaftar !!!");
-                if (!BCrypt.Net.BCrypt.Verify(password, user.password))
-                    throw new Exception("password Salah, Silahkan Periksa password Anda !!!");  
+                if (!BCrypt.Net.BCrypt.Verify(Password, user.Password))
+                    throw new Exception("Password Salah, Silahkan Periksa Password Anda !!!");  
 
                 return user;
             }
@@ -71,17 +69,17 @@ namespace MyPSG.API.Repository.Implements.Auth
         }
         public async Task<User> Register(User user)
         {
-            string pass = BCrypt.Net.BCrypt.HashPassword(user.password);
-            user.password = pass;
+            string pass = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password = pass;
             await Save(user);
 
             return user;
         }
         public async Task<User> Update(User obj)
         {
-            var user = await Task.Run(() => _context.Db.Get<User>(obj.user_id));
+            var user = await Task.Run(() => _context.Db.Get<User>(obj.User_id));
 
-            obj.password =  user.password;
+            obj.Password =  user.Password;
 
             await _context.Db.UpdateAsync(obj);
             return obj;
