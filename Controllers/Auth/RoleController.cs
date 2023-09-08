@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MyPSG.API.Dto.Auth;
 using MyPSG.API.Models;
 using MyPSG.API.Models.Auth;
@@ -18,7 +14,7 @@ using MyPSG.API.Repository.Interfaces;
 
 namespace MyPSG.API.Controllers.Auth
 {
-    [Route("opiumapi/[controller]")]
+    [Route("mypsgapi/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
     {

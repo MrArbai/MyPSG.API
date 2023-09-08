@@ -15,9 +15,9 @@ using MyPSG.API.Models.Auth;
 using MyPSG.API.Repository.Implements;
 using MyPSG.API.Repository.Interfaces;
 
-namespace Opium.Api.Controllers.Utl
+namespace MyPSG.API.Controllers.Auth
 {
-    [Route("opiumapi/[controller]")]
+    [Route("mypsgapi./[controller]")]
     [ApiController]
     public class AppVersionInfoController : ControllerBase
     {

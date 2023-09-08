@@ -13,7 +13,7 @@ using MyPSG.API.Repository.Interfaces;
 
 namespace MyPSG.API.Controllers.Auth
 {
-    [Route("opiumapi/[controller]")]
+    [Route("mypsgapi/[controller]")]
     [ApiController]
     public class MenuController : ControllerBase
     {

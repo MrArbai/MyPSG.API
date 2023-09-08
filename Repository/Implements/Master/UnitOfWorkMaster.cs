@@ -7,7 +7,7 @@ namespace MyPSG.API.Repository.Implements.Master
     {
         private IDapperContext _context;
         private IItemRepository _itemRepository;
-       
+        private IItemUomRepository _itemUomRepository;
       
         public UnitOfWorkMaster(IDapperContext context)
         {
@@ -17,6 +17,9 @@ namespace MyPSG.API.Repository.Implements.Master
         // ============== Repository =================
         public IItemRepository ItemRepository {
             get { return _itemRepository ??= new ItemRepository(_context); }
+        }
+        public IItemUomRepository ItemUomRepository {
+            get { return _itemUomRepository ??= new ItemUomRepository(_context); }
         }
        
     }

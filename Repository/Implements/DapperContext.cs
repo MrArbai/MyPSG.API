@@ -13,12 +13,12 @@ namespace MyPSG.API.Repository.Implements
         
         public DapperContext()
         {
-            var server = "localhost";
-            var port = "5432";
-            var dbName = "MyPSG";
-            var appName = "SambuAF";
-            var userId = "postgres";
-            var userPassword = "postgres";
+            var server = Environment.GetEnvironmentVariable("DB_HOST");
+            var port = Environment.GetEnvironmentVariable("DB_PORT");
+            var dbName = Environment.GetEnvironmentVariable("DB_DATABASE");
+            var appName = Environment.GetEnvironmentVariable("DB_APPNAME");
+            var userId = Environment.GetEnvironmentVariable("DB_USERNAME");
+            var userPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
   
             _connectionString = string.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};ApplicationName={5};Timeout=600", server, port, userId, userPassword, dbName, appName);

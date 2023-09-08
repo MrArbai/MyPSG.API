@@ -16,42 +16,23 @@ namespace MyPSG.API.Controllers.Master
 {
     [Route("mypsgapi/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class UomController : ControllerBase
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(ItemController));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(UomController));
         private readonly IConfiguration _config;
-        public ItemController(IConfiguration config)
+        public UomController(IConfiguration config)
         {
             _config = config;
         }
         
-        [HttpGet("GetAllItem"),Authorize]   
-        public async Task<IActionResult> GetAll(){
-            try
-            {
-                IEnumerable<Item> hasil;
-                using(IDapperContext _context = new DapperContext()){
-                    var _uow = new UnitOfWorkMaster(_context);
-                    hasil = await _uow.ItemRepository.GetAll();
-                }
-
-                var st2 = StTrans.SetSt(200, 0, "Data di temukan");
-                return Ok(new { Status = st2, Results = hasil });
-            }
-            catch (Exception e)
-            {
-                var st = StTrans.SetSt(400, 0, e.Message);
-                return Ok(new { Status = st });
-            }
-        }
         [HttpGet("GetByID"),Authorize]   
         public async Task<IActionResult> GetByID(string id){
             try
             {
-                Item hasil = new();
+                ItemUom hasil = new();
                 using(IDapperContext _context = new DapperContext()){
                     var _uow = new UnitOfWorkMaster(_context);
-                    hasil = await _uow.ItemRepository.GetByID(id);
+                    hasil = await _uow.ItemUomRepository.GetByID(id);
                 }
 
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");
@@ -63,14 +44,14 @@ namespace MyPSG.API.Controllers.Master
                 return Ok(new { Status = st });
             }
         }
-        [HttpGet("Get"),Authorize]   
-        public async Task<IActionResult> Get(ItemParam param){
+        [HttpPost("Save"),Authorize]   
+        public async Task<IActionResult> Save(ItemUom param){
             try
             {
-                IEnumerable<ItemDto> hasil;
+                ItemUom hasil;
                 using(IDapperContext _context = new DapperContext()){
                     var _uow = new UnitOfWorkMaster(_context);
-                    hasil = await _uow.ItemRepository.GetItem(param);
+                    hasil = await _uow.ItemUomRepository.Save(param);
                 }
 
                 var st2 = StTrans.SetSt(200, 0, "Data di temukan");

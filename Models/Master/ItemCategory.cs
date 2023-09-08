@@ -9,7 +9,7 @@ namespace MyPSG.API.Models.Master
     {
         [ExplicitKey]
         [Column("category_id")]
-        public int Category_id { get; set; }
+        public string Category_id { get; set; }
         [Column("revision_no")]
         public int Revision_no { get; set; }
         [Column("category_name")]

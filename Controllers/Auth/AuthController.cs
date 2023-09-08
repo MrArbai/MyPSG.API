@@ -17,9 +17,9 @@ using MyPSG.API.Models.Auth;
 using MyPSG.API.Repository.Implements;
 using MyPSG.API.Repository.Interfaces;
 
-namespace MyPSG.API.Controllers.Utl
+namespace MyPSG.API.Controllers.Auth
 {
-    [Route("opiumapi/[controller]")]
+    [Route("mypsgapi/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -167,17 +167,17 @@ namespace MyPSG.API.Controllers.Utl
                     };
                     UserLoginInfo users = new()
                     {
-                        Login_guid = _context.GetGUID(),
-                        Login_date = DateTime.Now,
-                        Login_id = userDto.User_id.ToLower(),
-                        Computer_name = userDto.Computer,
-                        Login_type = "O",
-                        App_version = ds.last_version,
-                        Ip_address = Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                        login_guid = _context.GetGUID(),
+                        login_date = DateTime.Now,
+                        login_id = userDto.User_id.ToLower(),
+                        computer_name = userDto.Computer,
+                        login_type = "O",
+                        app_version = ds.last_version,
+                        ip_address = Request.HttpContext.Connection.RemoteIpAddress.ToString()
                     };
 
                     await _uow.AuthRepository.Login(users);
-                    dt.Sign_id = users.Login_id;
+                    dt.Sign_id = users.login_id;
 
                     if (dt == null)
                         return Unauthorized();

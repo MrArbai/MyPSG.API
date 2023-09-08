@@ -1,4 +1,5 @@
 using Dapper.Contrib.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -9,11 +10,11 @@ namespace MyPSG.API.Models.Master
     {
         [ExplicitKey]
         [Column("uom_id")]
-        public int Uom_Id { get; set; }
+        public string Uom_Id { get; set; }
         [Column("uom_name")]
-        public int Uom_Name { get; set; }
+        public string Uom_Name { get; set; }
         [Column("revision_no")]
-        public string Revision_No { get; set; }
+        public short Revision_No { get; set; }
     }
 }
 

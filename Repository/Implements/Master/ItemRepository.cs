@@ -4,6 +4,9 @@ using Dapper.Contrib.Extensions;
 using MyPSG.API.Repository.Interfaces;
 using MyPSG.API.Repository.Interfaces.Master;
 using MyPSG.API.Models.Master;
+using System.Collections.Generic;
+using MyPSG.API.Dto.Master;
+using Dapper;
 
 namespace MyPSG.API.Repository.Implements.Master
 {
@@ -25,86 +28,79 @@ namespace MyPSG.API.Repository.Implements.Master
             }
             catch (Exception ex)
             {
-                throw new Exception("GetByID", ex);
+                throw new Exception("GetByID" + ex.Message);
+            }
+
+
+        }
+        public async Task<IEnumerable<Item>> GetAll()
+        {
+            try
+            {
+                var Item = await Task.Run(() => _context.Db.GetAll<Item>());
+                return Item;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetAll" + ex.Message);
             }
 
 
         }
         public async Task Save(Item Item)
         {
-             try
+            try
             {
-                await Task.Run(() => _context.Db.InsertAsync(Item));              
+                await Task.Run(() => _context.Db.InsertAsync(Item));
             }
             catch (Exception ex)
             {
-                throw new Exception("Save", ex);
+                throw new Exception("Save" + ex.Message);
             }
         }
         public async Task Update(Item Item)
         {
-             try
+            try
             {
                 await Task.Run(() => _context.Db.UpdateAsync(Item));
-                
+
             }
             catch (Exception ex)
             {
-                throw new Exception("Save", ex);
+                throw new Exception("Save" + ex.Message);
             }
         }
         public async Task Delete(Item Item)
         {
-             try
+            try
             {
                 await Task.Run(() => _context.Db.Delete(Item));
-                
+
             }
             catch (Exception ex)
             {
-                throw new Exception("Save", ex);
+                throw new Exception("Save" + ex.Message);
             }
         }
-        // public async Task<IEnumerable<ItemDto>> GetItem(ItemParam param)
-        // {
-        //     var Item = new Dictionary<string, ItemDto>();
-        //     var Category = new Dictionary<string, ItemCategory>();
-        //     var SubCategory = new Dictionary<string, ItemSubCategory>();
-        //     var Uom = new Dictionary<string, ItemUom>();
-        //     var PurcUom = new Dictionary<string, ItemUom>();
+        public async Task<IEnumerable<ItemDto>> GetItem(ItemParam param)
+        {
+            // List<dynamic> queryResult = new();
+            var queryResult = await Task.Run(() => _context.Db.QueryAsync<List<dynamic>>(
+                param.Query));
 
-        //     await Task.Run(() => _context.Db.QueryAsync<ItemDto>(
-        //         param.Query,
-        //         new[]
-        //         {
-        //             typeof(ItemDto),
-        //             typeof(ItemCategory),
-        //             typeof(ItemSubCategory),
-        //             typeof(ItemUom),
-        //             typeof(ItemUom)
+            List<ItemDto> items = new();
 
-        //         }, obj =>
-        //     { 
-        //         ItemDto item = obj[0] as ItemDto;
-        //         ItemCategory category = obj[1] as ItemCategory;
-        //         ItemSubCategory subcategory = obj[2] as ItemSubCategory;
-        //         ItemUom uom = obj[3] as ItemUom;
-        //         ItemUom purchuom = obj[4] as ItemUom;
+            // foreach (var item in queryResult)
+            // {
+            //     ItemDto ItemDto = new();
+            //     {
+            //         ItemDto.ItemID = item.ToString();
+            //     }
+            //     items.Add(ItemDto);
+            // }
 
-        //         if (!Item.TryGetValue(item.ItemID, out ItemDto iitem))
-        //         {
-        //             iitem = item;
-        //             iitem.Category = category;
-        //             iitem.Sub_Category = subcategory;
-        //             iitem.UOMID = uom;
-        //             iitem.PurcheserUOM = purchuom;
-        //         }
-        //         if (!Category.TryGetValue(category.Category_id.ToString(), out ItemCategory ccategory))
-        //         {
-
-        //         }
-        //     },splitOn: "id_item,id_subcategory,id_category,id_uom,id_purchase_uom"));
-        //     return Item.Values;
-        // }
+            
+            return items;
+        }
     }
 }

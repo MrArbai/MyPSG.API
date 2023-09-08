@@ -2,26 +2,26 @@ using System;
 using System.Threading.Tasks;
 using Dapper.Contrib.Extensions;
 using MyPSG.API.Repository.Interfaces;
-using MyPSG.API.Repository.Interfaces.Master;
 using MyPSG.API.Models.Master;
+using MyPSG.API.Repository.Interfaces.Master;
 
 namespace MyPSG.API.Repository.Implements.Master
 {
-    internal class ItemCategoryRepository : IItemCategoryRepository
+    internal class ItemUomRepository : IItemUomRepository
     {
         private readonly IDapperContext _context;
 
-        public ItemCategoryRepository(IDapperContext context)
+        public ItemUomRepository(IDapperContext context)
         {
             _context = context;
         }
 
-        public async Task<ItemCategory> GetByID(int Category_id)
+        public async Task<ItemUom> GetByID(string Uom_id)
         {
             try
             {
-                var ItemCategory = await Task.Run(() => _context.Db.Get<ItemCategory>(Category_id));
-                return ItemCategory;
+                var ItemUom = await Task.Run(() => _context.Db.Get<ItemUom>(Uom_id));
+                return ItemUom;
             }
             catch (Exception ex)
             {
@@ -30,22 +30,26 @@ namespace MyPSG.API.Repository.Implements.Master
 
 
         }
-        public async Task Save(ItemCategory Item)
+        public async Task<ItemUom> Save(ItemUom Uom)
         {
              try
             {
-                await Task.Run(() => _context.Db.InsertAsync(Item));              
+                Uom.Uom_Id = _context.GetGUID();
+                await Task.Run(() => _context.Db.InsertAsync(Uom));
+                return Uom;             
             }
             catch (Exception ex)
             {
                 throw new Exception("Save" + ex.Message);
             }
         }
-        public async Task Update(ItemCategory Item)
+        public async Task<ItemUom> Update(ItemUom Uom)
         {
              try
             {
-                await Task.Run(() => _context.Db.UpdateAsync(Item));
+                Uom.Revision_No++;
+                await Task.Run(() => _context.Db.UpdateAsync(Uom));
+                return Uom;
                 
             }
             catch (Exception ex)
@@ -53,12 +57,11 @@ namespace MyPSG.API.Repository.Implements.Master
                 throw new Exception("Save" + ex.Message);
             }
         }
-        public async Task Delete(ItemCategory Item)
+        public async Task Delete(ItemUom Uom)
         {
              try
             {
-                await Task.Run(() => _context.Db.Delete(Item));
-                
+                await Task.Run(() => _context.Db.Delete(Uom));
             }
             catch (Exception ex)
             {
